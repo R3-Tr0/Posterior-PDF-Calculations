@@ -6,13 +6,17 @@ import matplotlib.pyplot as plt
 # Creates 50 values saved as an array to variable mu.
 mu = np.linspace(1.65, 1.8, num = 50)
 test = np.linspace(0, 2)
-uniform_dist = (sts.uniform.pdf(mu) + 1)
-uniform_dist = uniform_dist/uniform_dist.sum()
-beta_dist = sts.beta.pdf(mu , 2, 5, loc = 1.65, scale = 0.2)
-beta_dist = beta_dist/beta_dist.sum()
 
-plt.plot(mu, beta_dist, label = "Beta Dist")
-plt.plot(mu, uniform_dist, label = "Uniform Dist")
+# Prior Distributions
+
+uniform_dist = (sts.uniform.pdf(mu) + 1)
+uniform_dist = uniform_dist/uniform_dist.sum() # Non-informative prior.
+
+beta_dist = sts.beta.pdf(mu , 2, 5, loc = 1.65, scale = 0.2)
+beta_dist = beta_dist/beta_dist.sum() # Subjective/Informative prior.
+
+plt.plot(mu, beta_dist, label = "Beta Dist (subjective prior)")
+plt.plot(mu, uniform_dist, label = "Uniform Dist (non-informative prior)")
 plt.title("Probability plot of hypothesized $\mu$ given observed 1.7m")
 plt.xlabel("Value of $\mu$ in meters")
 plt.ylabel("Probability density")
@@ -28,8 +32,8 @@ def likelihood_func(datum, mu):
 
 likelihood_out = likelihood_func(1.7, mu)
 
-plt.plot(mu, beta_dist, label = "Beta Dist")
-plt.plot(mu, uniform_dist, label = "Uniform Dist")
+plt.plot(mu, beta_dist, label = "Beta Dist (subjective prior)")
+plt.plot(mu, uniform_dist, label = "Uniform Dist (non-informative prior)")
 plt.plot(mu, likelihood_out, label = "Likelihood Dist")
 plt.title("Probability plot of hypothesized $\mu$ given observed 1.7m")
 plt.xlabel("Value of $\mu$ in meters")
@@ -43,8 +47,8 @@ plt.legend()
 plt.show()
 
 unnormalized_posterior = likelihood_out * uniform_dist
-plt.plot(mu, beta_dist, label = "Beta Dist")
-plt.plot(mu, uniform_dist, label = "Uniform Dist")
+plt.plot(mu, beta_dist, label = "Beta Dist (subjective prior)")
+plt.plot(mu, uniform_dist, label = "Uniform Dist (non-informative prior)")
 plt.plot(mu, likelihood_out, label = "Likelihood Dist")
 plt.plot(mu, unnormalized_posterior, label = "Unnormalized posterior")
 plt.title("Probability plot of hypothesized $\mu$ given observed 1.7m")
@@ -55,12 +59,12 @@ plt.legend()
 # Shows beta, uniform, likelihood, and unnormalized posterior dists.
 plt.show()
 
-posterior = unnormalized_posterior/unnormalized_posterior.sum()
-plt.plot(mu, beta_dist, label = "Beta Dist")
-plt.plot(mu, uniform_dist, label = "Uniform Dist")
+normalized_posterior = unnormalized_posterior/unnormalized_posterior.sum()
+plt.plot(mu, beta_dist, label = "Beta Dist (subjective prior)")
+plt.plot(mu, uniform_dist, label = "Uniform Dist (non-informative prior)")
 plt.plot(mu, likelihood_out, label = "Likelihood Dist")
 plt.plot(mu, unnormalized_posterior, label = "Unnormalized posterior")
-plt.plot(mu, posterior, label = "Normalized posterior")
+plt.plot(mu, normalized_posterior, label = "Normalized posterior")
 plt.title("Probability plot of hypothesized $\mu$ given observed 1.7m")
 plt.xlabel("Value of $\mu$ in meters")
 plt.ylabel("Probability density/Likelihood")
